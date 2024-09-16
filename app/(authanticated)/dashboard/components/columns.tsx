@@ -35,7 +35,7 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">{row.getValue("name")}</span>
+          <span className="max-w-[200px] truncate font-medium">{row.getValue("name")}</span>
         </div>
       );
     },
@@ -45,7 +45,7 @@ export const columns: ColumnDef<User>[] = [
     header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
     cell: ({ row }) => {
       return (
-        <div className="flex w-[100px] items-center">
+        <div className="flex max-w-[300px] truncate items-center">
           <span>{row.getValue("email")}</span>
         </div>
       );
@@ -61,6 +61,48 @@ export const columns: ColumnDef<User>[] = [
       return (
         <div className="flex items-center">
           <span>{row.getValue("phone")}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
+    accessorKey: "street",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Street" />,
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center">
+          <span>{row.original.address.street}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
+    accessorKey: "city",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="City" />,
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center">
+          <span>{row.original.address.city}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
+    accessorKey: "zip",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Zip" />,
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center">
+          <span>{row.original.address.zipCode}</span>
         </div>
       );
     },
