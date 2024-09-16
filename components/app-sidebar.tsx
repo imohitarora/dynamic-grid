@@ -1,39 +1,14 @@
-"use client"
+"use client";
 
-import {
-  Atom,
-  Bird,
-  BookOpen,
-  Bot,
-  Code2,
-  Eclipse,
-  Frame,
-  History,
-  LifeBuoy,
-  Map,
-  PieChart,
-  Rabbit,
-  Send,
-  Settings2,
-  SquareTerminal,
-  Star,
-  Turtle,
-} from "lucide-react"
+import { Atom, User2, Bird, BookOpen, Bot, Code2, Eclipse, Frame, History, LifeBuoy, Map, PieChart, Rabbit, Send, Settings2, SquareTerminal, Star, Turtle } from "lucide-react";
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
-import { StorageCard } from "@/components/storage-card"
-import { TeamSwitcher } from "@/components/team-switcher"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarItem,
-  SidebarLabel,
-} from "@/components/ui/sidebar"
+import { NavMain } from "@/components/nav-main";
+import { NavProjects } from "@/components/nav-projects";
+import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
+import { StorageCard } from "@/components/storage-card";
+import { TeamSwitcher } from "@/components/team-switcher";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarItem, SidebarLabel } from "@/components/ui/sidebar";
 const data = {
   teams: [
     {
@@ -58,6 +33,11 @@ const data = {
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
+    {
+      title: "Users",
+      url: "#",
+      icon: User2,
+    },
     {
       title: "Playground",
       url: "#",
@@ -216,26 +196,22 @@ const data = {
   searchResults: [
     {
       title: "Routing Fundamentals",
-      teaser:
-        "The skeleton of every application is routing. This page will introduce you to the fundamental concepts of routing for the web and how to handle routing in Next.js.",
+      teaser: "The skeleton of every application is routing. This page will introduce you to the fundamental concepts of routing for the web and how to handle routing in Next.js.",
       url: "#",
     },
     {
       title: "Layouts and Templates",
-      teaser:
-        "The special files layout.js and template.js allow you to create UI that is shared between routes. This page will guide you through how and when to use these special files.",
+      teaser: "The special files layout.js and template.js allow you to create UI that is shared between routes. This page will guide you through how and when to use these special files.",
       url: "#",
     },
     {
       title: "Data Fetching, Caching, and Revalidating",
-      teaser:
-        "Data fetching is a core part of any application. This page goes through how you can fetch, cache, and revalidate data in React and Next.js.",
+      teaser: "Data fetching is a core part of any application. This page goes through how you can fetch, cache, and revalidate data in React and Next.js.",
       url: "#",
     },
     {
       title: "Server and Client Composition Patterns",
-      teaser:
-        "When building React applications, you will need to consider what parts of your application should be rendered on the server or the client. ",
+      teaser: "When building React applications, you will need to consider what parts of your application should be rendered on the server or the client. ",
       url: "#",
     },
     {
@@ -245,7 +221,7 @@ const data = {
       url: "#",
     },
   ],
-}
+};
 
 export function AppSidebar() {
   return (
@@ -274,5 +250,5 @@ export function AppSidebar() {
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
