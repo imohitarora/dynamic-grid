@@ -34,8 +34,13 @@ const data = {
   },
   navMain: [
     {
-      title: "Users",
-      url: "#",
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: Eclipse,
+    },
+    {
+      title: "Tasks",
+      url: "/users",
       icon: User2,
     },
     {
