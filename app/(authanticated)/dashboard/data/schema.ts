@@ -12,14 +12,6 @@ export const taskSchema = z.object({
 
 export type Task = z.infer<typeof taskSchema>
 
-export const userSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  email: z.string(),
-  phone: z.string(),
-})
-
-export type User = z.infer<typeof userSchema>
 
 export const addressSchema = z.object({
   street: z.string(),
@@ -28,3 +20,13 @@ export const addressSchema = z.object({
 })
 
 export type Address = z.infer<typeof addressSchema>
+
+export const userSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  email: z.string(),
+  phone: z.string(),
+  address: addressSchema,
+})
+
+export type User = z.infer<typeof userSchema>
