@@ -7,7 +7,7 @@ import { userSchema } from "./data/schema";
 import { DataTable } from "./components/data-table";
 
 async function getUsers() {
-  const data = await fs.readFile(path.join(process.cwd(), "app/(authanticated)/users/data/users.json"));
+  const data = await fs.readFile(path.join(process.cwd(), "app/(authanticated)/dashboard/data/users.json"));
 
   const users = JSON.parse(data.toString());
 
