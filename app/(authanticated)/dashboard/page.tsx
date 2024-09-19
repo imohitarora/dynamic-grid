@@ -1,21 +1,36 @@
-import { promises as fs } from "fs";
-import path from "path";
-import { z } from "zod";
+"use client";
+
+import { useEffect, useState } from "react";
 import { columns } from "./components/columns";
-import { userSchema } from "./data/schema";
-
+import { mobileColumns } from "./components/mobile-columns";
 import { DataTable } from "./components/data-table";
+import { useIsMobile } from "@/hooks/use-mobile";
 
-async function getUsers() {
-  const data = await fs.readFile(path.join(process.cwd(), "app/(authanticated)/dashboard/data/users.json"));
+export default function Page() {
+  const [tasks, setTasks] = useState([]);
+  const isMobile = useIsMobile();
 
-  const users = JSON.parse(data.toString());
+  useEffect(() => {
+    fetch("/api/users")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setTasks(data.users);
+      });
+  }, []);
 
-  return z.array(userSchema).parse(users);
-}
+  useEffect(() => {
+    // This effect will run when the screen size changes
+  }, [isMobile]);
 
-export default async function Page() {
-  const tasks = await getUsers();
+  if (isMobile) {
+    return (
+      <>
+        <h1 className="text-2xl font-semibold m-4 text-center">Users</h1>
+        <DataTable columns={mobileColumns} data={tasks} />
+      </>
+    );
+  }
 
   return (
     <>
