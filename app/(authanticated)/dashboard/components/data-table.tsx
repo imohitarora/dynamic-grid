@@ -1,38 +1,55 @@
 "use client";
 
-import * as React from "react";
-import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { ColumnDef, SortingState, VisibilityState, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import * as React from "react";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
+  mobileColumns?: string[];
 }
 
-async function fetchData(page: number, pageSize: number, filters: ColumnFiltersState) {
+async function fetchData(page: number, pageSize: number, searchString: string) {
   const params = new URLSearchParams({
     page: page.toString(),
     pageSize: pageSize.toString(),
-    filters: JSON.stringify(filters),
+    search: searchString,
   });
   const response = await fetch(`/api/users?${params}`);
   return response.json();
 }
 
-export function DataTable<TData, TValue>({ columns }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, mobileColumns = [] }: DataTableProps<TData, TValue>) {
+  const isMobile = useIsMobile();
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [searchString, setSearchString] = React.useState<string>("");
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
   });
 
+  React.useEffect(() => {
+    if (isMobile !== undefined) {
+      const newColumnVisibility: VisibilityState = {};
+      columns.forEach((column) => {
+        const columnId = column.id;
+        console.log("columnId >>>>>>", columnId);
+        if (columnId) {
+          newColumnVisibility[columnId] = isMobile ? mobileColumns.includes(columnId) : true;
+        }
+      });
+      setColumnVisibility(newColumnVisibility);
+    }
+  }, [isMobile, columns, mobileColumns]);
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["users", pagination.pageIndex, pagination.pageSize, columnFilters],
-    queryFn: () => fetchData(pagination.pageIndex, pagination.pageSize, columnFilters),
+    queryKey: ["users", pagination.pageIndex, pagination.pageSize, searchString],
+    queryFn: () => fetchData(pagination.pageIndex, pagination.pageSize, searchString),
     placeholderData: keepPreviousData,
   });
 
@@ -43,11 +60,9 @@ export function DataTable<TData, TValue>({ columns }: DataTableProps<TData, TVal
     state: {
       sorting,
       columnVisibility,
-      columnFilters,
       pagination,
     },
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
@@ -55,19 +70,26 @@ export function DataTable<TData, TValue>({ columns }: DataTableProps<TData, TVal
     manualFiltering: true,
   });
 
+  const handleSearch = (value: string) => {
+    setSearchString(value);
+    setPagination((prev) => ({ ...prev, pageIndex: 0 })); // Reset to first page on new search
+  };
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error occurred: {error.message}</div>;
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
-      <div className="rounded-md border">
+      <DataTableToolbar table={table} searchString={searchString} onSearch={handleSearch} />
+      <div className="overflow-x-auto rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</TableHead>
+                  <TableHead key={header.id} className="px-2 py-1 md:px-4 md:py-2">
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
                 ))}
               </TableRow>
             ))}
@@ -77,7 +99,9 @@ export function DataTable<TData, TValue>({ columns }: DataTableProps<TData, TVal
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    <TableCell key={cell.id} className="px-2 py-1 md:px-4 md:py-2">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))

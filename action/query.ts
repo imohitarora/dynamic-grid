@@ -1,6 +1,6 @@
 import db from "@/drizzle/db";
 import { user, InsertUser, address } from "@/drizzle/schema";
-import { eq, ilike, or, and, sql } from "drizzle-orm";
+import { eq, ilike, or, sql } from "drizzle-orm";
 
 export async function getUsers() {
     const allUsers = await db.select({
@@ -35,18 +35,23 @@ export async function filterUser(searchString: string) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getUsersWithPaginationAndFilter(page: number, pageSize: number, filters: any[]) {
+export async function getUsersWithPaginationAndFilter(
+    page: number,
+    pageSize: number,
+    searchString: string
+) {
     const offset = page * pageSize;
 
     let whereClause = undefined;
-    if (filters.length > 0) {
-        whereClause = and(...filters.map(filter => {
-            const column = filter.id === 'city' ? address[filter.id] : user[filter.id];
-            if (filter.id === 'id') {
-                return eq(column, parseInt(filter.value, 10));
-            }
-            return ilike(column, `%${filter.value}%`);
-        }));
+    if (searchString && searchString.trim() !== '') {
+        whereClause = or(
+            ilike(user.name, `%${searchString}%`),
+            ilike(user.email, `%${searchString}%`),
+            ilike(user.phone, `%${searchString}%`),
+            ilike(address.street, `%${searchString}%`),
+            ilike(address.city, `%${searchString}%`),
+            ilike(address.zipCode, `%${searchString}%`)
+        );
     }
 
     const usersQuery = db.select({
