@@ -1,6 +1,6 @@
 "use client";
 
-import { Atom, User2, Bird, BookOpen, Bot, Code2, Eclipse, Frame, History, LifeBuoy, Map, PieChart, Rabbit, Send, Settings2, SquareTerminal, Star, Turtle } from "lucide-react";
+import { Atom, Bird, BookOpen, Bot, Code2, Eclipse, Frame, History, LifeBuoy, Map, PieChart, Rabbit, Send, Settings2, SquareTerminal, Star, Turtle } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
@@ -37,11 +37,6 @@ const data = {
       title: "Dashboard",
       url: "/dashboard",
       icon: Eclipse,
-    },
-    {
-      title: "Tasks",
-      url: "/users",
-      icon: User2,
     },
     {
       title: "Playground",
