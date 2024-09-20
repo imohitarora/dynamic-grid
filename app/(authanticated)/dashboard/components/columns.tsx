@@ -39,6 +39,7 @@ export const columns: ColumnDef<User>[] = [
         </div>
       );
     },
+    meta: { isFilterableColumn: true },
   },
   {
     accessorKey: "email",
@@ -53,6 +54,7 @@ export const columns: ColumnDef<User>[] = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
+    meta: { isFilterableColumn: true },
   },
   {
     accessorKey: "phone",
@@ -67,6 +69,7 @@ export const columns: ColumnDef<User>[] = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
+    meta: { isFilterableColumn: true },
   },
   {
     accessorKey: "street",
