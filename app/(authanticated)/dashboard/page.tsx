@@ -14,7 +14,7 @@ async function getUsers() {
 export default function Page() {
   const { data, isLoading, isError } = useQuery({
     queryFn: async () => await getUsers(),
-    queryKey: ["users"], //Array according to Documentation
+    queryKey: ["users"],
   });
 
   if (isLoading) return <div>Loading...</div>;

@@ -7,6 +7,6 @@ const pool = new Pool({
 });
 
 // Initialize Drizzle with node-postgres client
-const db = drizzle(pool);
+const db = drizzle(pool, { logger: true });
 
 export default db;
