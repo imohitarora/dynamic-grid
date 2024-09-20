@@ -23,6 +23,7 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: false,
   },
   {
+    id: "id",
     accessorKey: "id",
     header: ({ column }) => <DataTableColumnHeader column={column} title="User" />,
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
@@ -30,6 +31,7 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: false,
   },
   {
+    id: "name",
     accessorKey: "name",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
     cell: ({ row }) => {
@@ -39,9 +41,9 @@ export const columns: ColumnDef<User>[] = [
         </div>
       );
     },
-    meta: { isFilterableColumn: true },
   },
   {
+    id: "email",
     accessorKey: "email",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
     cell: ({ row }) => {
@@ -54,9 +56,9 @@ export const columns: ColumnDef<User>[] = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
-    meta: { isFilterableColumn: true },
   },
   {
+    id: "phone",
     accessorKey: "phone",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Phone" />,
     cell: ({ row }) => {
@@ -69,9 +71,9 @@ export const columns: ColumnDef<User>[] = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
-    meta: { isFilterableColumn: true },
   },
   {
+    id: "street",
     accessorKey: "street",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Street" />,
     cell: ({ row }) => {
@@ -86,6 +88,7 @@ export const columns: ColumnDef<User>[] = [
     },
   },
   {
+    id: "city",
     accessorKey: "city",
     header: ({ column }) => <DataTableColumnHeader column={column} title="City" />,
     cell: ({ row }) => {
@@ -100,6 +103,7 @@ export const columns: ColumnDef<User>[] = [
     },
   },
   {
+    id: "zip",
     accessorKey: "zip",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Zip" />,
     cell: ({ row }) => {
