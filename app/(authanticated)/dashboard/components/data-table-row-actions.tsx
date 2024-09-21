@@ -2,16 +2,32 @@
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
-interface DataTableRowActionsProps<TData> {
+// Define a more specific interface for the row data
+interface RowData {
+  id: string | number;
+  // Add other properties as needed
+}
+
+interface DataTableRowActionsProps<TData extends RowData> {
   row: Row<TData>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TData>) {
+export function DataTableRowActions<TData extends RowData>({ row }: DataTableRowActionsProps<TData>) {
+  const router = useRouter();
+
+  const handleEdit = () => {
+    router.push(`/dashboard/${row.original.id}`);
+  };
+
+  const handleDelete = () => {
+    // Implement delete functionality
+    console.log("Delete item:", row.original.id);
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -21,9 +37,9 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleEdit}>Edit</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleDelete}>
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>
