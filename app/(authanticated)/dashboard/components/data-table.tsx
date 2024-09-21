@@ -1,17 +1,17 @@
 "use client";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useIsMobile, useIsTab } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { ColumnDef, SortingState, VisibilityState, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import * as React from "react";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
+import Loading from "@/components/loading";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   mobileColumns?: string[];
-  tabColumns?: string[];
 }
 
 async function fetchData(page: number, pageSize: number, searchString: string) {
@@ -24,9 +24,8 @@ async function fetchData(page: number, pageSize: number, searchString: string) {
   return response.json();
 }
 
-export function DataTable<TData, TValue>({ columns, mobileColumns = [], tabColumns = [] }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, mobileColumns = [] }: DataTableProps<TData, TValue>) {
   const isMobile = useIsMobile();
-  const isTab = useIsTab();
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [searchString, setSearchString] = React.useState<string>("");
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -48,19 +47,6 @@ export function DataTable<TData, TValue>({ columns, mobileColumns = [], tabColum
       setColumnVisibility(newColumnVisibility);
     }
   }, [isMobile, columns, mobileColumns]);
-
-  React.useEffect(() => {
-    if (isTab !== undefined) {
-      const newColumnVisibility: VisibilityState = {};
-      columns.forEach((column) => {
-        const columnId = column.id;
-        if (columnId) {
-          newColumnVisibility[columnId] = isTab ? tabColumns.includes(columnId) : true;
-        }
-      });
-      setColumnVisibility(newColumnVisibility);
-    }
-  }, [isTab, columns, tabColumns]);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["users", pagination.pageIndex, pagination.pageSize, searchString],
@@ -90,7 +76,6 @@ export function DataTable<TData, TValue>({ columns, mobileColumns = [], tabColum
     setPagination((prev) => ({ ...prev, pageIndex: 0 })); // Reset to first page on new search
   };
 
-  if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error occurred: {error.message}</div>;
 
   return (
@@ -131,6 +116,7 @@ export function DataTable<TData, TValue>({ columns, mobileColumns = [], tabColum
         </Table>
       </div>
       <DataTablePagination table={table} />
+      {isLoading && <Loading />}
     </div>
   );
 }

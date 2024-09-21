@@ -7,7 +7,7 @@ export default function Page() {
   return (
     <>
       <h1 className="text-2xl font-semibold m-4 text-center">Users</h1>
-      <DataTable columns={columns} mobileColumns={["id", "name", "email"]} tabColumns={["id", "name", "email", "phone"]} />
+      <DataTable columns={columns} mobileColumns={["id", "name", "email"]} />
     </>
   );
 }

@@ -18,7 +18,7 @@ export function generateUsers(count: number) {
 
 
 const seedUsers = async (db: NodePgDatabase<Record<string, never>>) => { // Make this function async
-    const users = generateUsers(140); // Generate 10 users
+    const users = generateUsers(850); // Generate 10 users
     for (const u of users) { // Use a for...of loop for async/await
         const [{ insertedId }] = await db.insert(user).values({
             ...u, // Spread user properties
