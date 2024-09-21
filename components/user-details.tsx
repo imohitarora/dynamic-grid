@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "./loading";
 
 interface User {
   id: number;
@@ -19,17 +21,47 @@ interface User {
   zipCode: string;
 }
 
-export default function UserDetailsForm() {
+interface UserDetailsFormProps {
+  userId: number;
+}
+
+async function fetchData(userId: number) {
+  const response = await fetch(`/api/users/${userId}`);
+  return response.json();
+}
+
+export default function UserDetailsForm({ userId }: UserDetailsFormProps) {
   const router = useRouter();
+
   const [user, setUser] = useState<User>({
-    id: 1,
-    name: "Arnold Huel",
-    email: "Jayne_Heller15@gmail.com",
-    phone: "851.254.9638",
-    street: "973 Leslie Expressway",
-    city: "Lake Paulberg",
-    zipCode: "27704",
+    id: 0,
+    name: "",
+    email: "",
+    phone: "",
+    street: "",
+    city: "",
+    zipCode: "",
   });
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["userId", userId],
+    queryFn: () => fetchData(userId),
+  });
+
+  React.useEffect(() => {
+    if (data) {
+      const user = data.user;
+      setUser({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        street: user.address.street,
+        city: user.address.city,
+        zipCode: user.address.zipCode,
+      });
+    }
+  }, [data]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -136,6 +168,7 @@ export default function UserDetailsForm() {
           </div>
         </main>
       </div>
+      {isLoading && <Loading />}
     </div>
   );
 }

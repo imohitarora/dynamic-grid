@@ -13,6 +13,17 @@ export async function getUsers() {
     return allUsers;
 }
 
+export async function getUserById(id: number) {
+    const userById = await db.select({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: address,
+    }).from(user).innerJoin(address, eq(user.id, address.userId)).where(eq(user.id, id));
+    return userById[0];
+}
+
 export async function createUser(data: InsertUser) {
     await db.insert(user).values(data);
 }

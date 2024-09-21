@@ -1,10 +1,13 @@
 import UserDetailsForm from "@/components/user-details";
 
 export default function EditPage({ params }: { params: { slug: string } }) {
-  console.log(params.slug);
+  const slugNumber = parseInt(params.slug);
+  if (isNaN(slugNumber)) {
+    return <div>Invalid user ID</div>;
+  }
   return (
     <div>
-      <UserDetailsForm />
+      <UserDetailsForm userId={parseInt(params.slug)} />
     </div>
   );
 }

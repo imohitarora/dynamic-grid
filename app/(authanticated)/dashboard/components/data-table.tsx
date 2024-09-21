@@ -39,7 +39,6 @@ export function DataTable<TData, TValue>({ columns, mobileColumns = [] }: DataTa
       const newColumnVisibility: VisibilityState = {};
       columns.forEach((column) => {
         const columnId = column.id;
-        console.log("columnId >>>>>>", columnId);
         if (columnId) {
           newColumnVisibility[columnId] = isMobile ? mobileColumns.includes(columnId) : true;
         }
